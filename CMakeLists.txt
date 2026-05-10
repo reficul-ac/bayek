@@ -1,0 +1,4 @@
+add_subdirectory(common)
+add_subdirectory(fsw)
+add_subdirectory(telemetry)
+add_subdirectory(sim)

@@ -23,11 +23,27 @@ static actuator_cmd_t zero_actuators(void) {
   return cmd;
 }
 
-static fsw_mode_t select_mode(const fsw_input_t *in) {
+static int fsw_input_is_valid(const fsw_input_t *in) {
+  if (!in) {
+    return 0;
+  }
+  if (in->dt_s <= 0.0f || in->dt_s > 0.1f) {
+    return 0;
+  }
+  if (!in->gps.fix_valid) {
+    return 0;
+  }
+  return 1;
+}
+
+static fsw_mode_t select_mode(const fsw_input_t *in, int input_valid) {
+  if (!in) {
+    return FSW_MODE_FAILSAFE;
+  }
   if (!in->rc.arm_switch) {
     return FSW_MODE_DISARMED;
   }
-  if (!in->gps.fix_valid || in->dt_s <= 0.0f || in->dt_s > 0.1f) {
+  if (!input_valid) {
     return FSW_MODE_FAILSAFE;
   }
   return in->rc.mode_switch ? FSW_MODE_STABILIZE : FSW_MODE_MANUAL;
@@ -82,16 +98,24 @@ void bayek_fsw_reset(void) {
 }
 
 void bayek_fsw_step(const fsw_input_t *in, fsw_output_t *out) {
+  if (!out) {
+    return;
+  }
+
   if (!g_fsw.vehicle || !g_fsw.params) {
     out->estimate = g_fsw.estimate;
     out->mode = FSW_MODE_FAILSAFE;
     out->actuators = zero_actuators();
     return;
   }
-  update_estimate(in, &g_fsw.estimate);
 
+  int input_valid = fsw_input_is_valid(in);
+  out->mode = select_mode(in, input_valid);
+
+  if (input_valid) {
+    update_estimate(in, &g_fsw.estimate);
+  }
   out->estimate = g_fsw.estimate;
-  out->mode = select_mode(in);
 
   if (out->mode == FSW_MODE_DISARMED || out->mode == FSW_MODE_FAILSAFE) {
     out->actuators = g_fsw.vehicle->safe_actuators(g_fsw.params);

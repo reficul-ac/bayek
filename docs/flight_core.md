@@ -31,6 +31,8 @@ Bayek owns the interface shape. Vehicle repositories own the concrete implementa
 
 `bayek_fsw_step()` consumes one complete input sample and writes one complete output sample. The caller owns both input and output storage.
 
+If `out` is `NULL`, `bayek_fsw_step()` returns immediately because there is no safe place to report mode, estimate, or actuator output. If `in` is `NULL`, the step reports `FSW_MODE_FAILSAFE`, leaves the estimate unchanged, and commands safe actuator values when a vehicle interface is configured.
+
 The core currently keeps its runtime state in a static internal struct. That avoids dynamic allocation while keeping the public API simple. If multiple simultaneous FSW instances are required later, the natural extension is an explicit context API:
 
 ```c
@@ -64,6 +66,15 @@ The initial modes are:
 - `FSW_MODE_FAILSAFE`: command safe actuator values.
 
 The mode logic is intentionally simple. It uses the arm switch, GPS validity, and `dt_s` sanity bounds. This is not intended to be a final safety manager; it exists to make mode transitions deterministic and testable.
+
+FSW input validation is explicit and runs before estimator or control updates. An input sample is invalid when:
+
+- `in == NULL`
+- `dt_s <= 0.0f`
+- `dt_s > 0.1f`
+- `gps.fix_valid == 0`
+
+Invalid input samples do not advance the state estimate and do not step PID controllers. Armed invalid input selects `FSW_MODE_FAILSAFE`. Disarmed input remains `FSW_MODE_DISARMED`, with safe actuator values, so the disarm command stays distinct from runtime input failure.
 
 ## Estimate Placeholder
 

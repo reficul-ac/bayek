@@ -1,5 +1,9 @@
 add_library(bayek_fsw
+  control.c
+  fault.c
   fsw.c
+  guidance.c
+  nav.c
 )
 
 target_include_directories(bayek_fsw

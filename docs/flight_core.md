@@ -8,6 +8,17 @@ void bayek_fsw_reset(void);
 void bayek_fsw_step(const fsw_input_t *in, fsw_output_t *out);
 ```
 
+## Internal Domains
+
+`fsw.c` is the public facade and step orchestrator. Domain code lives next to it:
+
+- `nav.c/h`: state-estimate reset and sensor-driven estimate updates.
+- `fault.c/h`: input validity, disarm handling, mode selection, and failsafe entry.
+- `guidance.c/h`: mode-specific setpoints derived from commands and vehicle limits.
+- `control.c/h`: controller state and normalized control requests.
+
+These headers are internal implementation boundaries. External callers should continue to use `fsw.h` unless a future replay, test, or integration need justifies a dedicated public domain API.
+
 ## Vehicle Interface
 
 Vehicle repositories bind Bayek through:

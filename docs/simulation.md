@@ -15,7 +15,11 @@ This plant is not a flight dynamics model. It exists to validate build boundarie
 
 ## 6DOF Core
 
-`sim/sim6dof.c` provides a reusable C99 rigid-body integrator. It uses NED for world position/velocity and FRD for body-frame forces, moments, and angular rates. Callers provide body-frame force and moment vectors, and the core integrates translation, attitude, diagonal-inertia rotational dynamics, actuator lag, gravity, and simulation time. The quaternion is normalized every step and state validation rejects non-finite or physically unbounded values.
+`sim/sim6dof.c` provides a reusable C99 rigid-body integrator. It supports selectable world dynamics frames: local NED (`SIM6DOF_FRAME_NED = 0`) and ECEF (`SIM6DOF_FRAME_ECEF = 1`). ECEF is the default. The implemented Earth model is spherical (`SIM6DOF_EARTH_SPHERICAL`) with a default radius of `6378137.0 m`; WGS84 ellipsoid corrections, Earth rotation, Coriolis, and centrifugal terms are not modeled.
+
+The state keeps synchronized NED and ECEF views: `position_ned_m`, `velocity_ned_mps`, and `attitude_body_to_ned` remain available, while `position_ecef_m`, `velocity_ecef_mps`, and `attitude_body_to_ecef` expose the ECEF truth view. In NED mode the legacy local dynamics are integrated and ECEF fields are derived afterward. In ECEF mode ECEF position/velocity are integrated directly, body forces are rotated through the body-to-ECEF quaternion, gravity points toward the Earth center, and the local NED view is derived relative to the configured origin.
+
+Callers provide body-frame force and moment vectors in FRD axes. The core integrates translation, attitude, diagonal-inertia rotational dynamics, actuator lag, gravity, and simulation time. The quaternion is normalized every step and state validation rejects non-finite or physically unbounded values.
 
 `sim/sim_fixedwing.c` is the first airframe model on top of that core. It is deterministic and parameter-struct based: no config parser, allocation, wind, or sensor noise. The model includes thrust, lift, drag, simple control moments, angular-rate damping, and a soft angle-of-attack lift limit for stall protection. It also converts truth state into `fsw_input_t` samples for SITL use.
 

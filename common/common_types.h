@@ -111,8 +111,6 @@ typedef struct {
 } fsw_output_t;
 
 typedef struct {
-  real_t mass_kg;
-  real_t wing_area_m2;
   real_t max_airspeed_mps;
   real_t min_airspeed_mps;
   real_t max_roll_rad;

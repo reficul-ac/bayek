@@ -75,6 +75,7 @@ The initial modes are:
 - `FSW_MODE_MANUAL`: pass normalized RC commands through the configured vehicle mixer.
 - `FSW_MODE_STABILIZE`: map RC sticks to simple attitude/rate setpoints and apply PID utilities.
 - `FSW_MODE_FAILSAFE`: command safe actuator values.
+- `FSW_MODE_MISSION`: guide to the loaded GPS waypoint mission through the same stabilize controller and control mixer.
 
 The mode logic is intentionally simple. It uses the arm switch, GPS validity, and `dt_s` sanity bounds. This is not intended to be a final safety manager; it exists to make mode transitions deterministic and testable.
 

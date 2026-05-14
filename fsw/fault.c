@@ -23,5 +23,14 @@ fsw_mode_t bayek_fault_select_mode(const fsw_input_t *in, int input_valid) {
   if (!input_valid) {
     return FSW_MODE_FAILSAFE;
   }
-  return in->rc.mode_switch ? FSW_MODE_STABILIZE : FSW_MODE_MANUAL;
+  if (in->rc.mode_switch == 0U) {
+    return FSW_MODE_MANUAL;
+  }
+  if (in->rc.mode_switch == 1U) {
+    return FSW_MODE_STABILIZE;
+  }
+  if (in->rc.mode_switch == 2U) {
+    return FSW_MODE_MISSION;
+  }
+  return FSW_MODE_FAILSAFE;
 }

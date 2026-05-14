@@ -101,7 +101,8 @@ typedef enum {
   FSW_MODE_DISARMED = 0,
   FSW_MODE_MANUAL = 1,
   FSW_MODE_STABILIZE = 2,
-  FSW_MODE_FAILSAFE = 3
+  FSW_MODE_FAILSAFE = 3,
+  FSW_MODE_MISSION = 4
 } fsw_mode_t;
 
 typedef struct {
@@ -121,6 +122,30 @@ typedef struct {
   real_t safe_motor;
   real_t safe_surface;
 } vehicle_params_t;
+
+#ifndef BAYEK_MISSION_MAX_WAYPOINTS
+#define BAYEK_MISSION_MAX_WAYPOINTS 16U
+#endif
+
+typedef struct {
+  real_t lat_deg;
+  real_t lon_deg;
+  real_t alt_m;
+  real_t throttle;
+  real_t acceptance_radius_m;
+} bayek_mission_waypoint_t;
+
+typedef struct {
+  uint32_t waypoint_count;
+  bayek_mission_waypoint_t waypoints[BAYEK_MISSION_MAX_WAYPOINTS];
+} bayek_mission_plan_t;
+
+typedef struct {
+  uint8_t loaded;
+  uint32_t active_waypoint_index;
+  uint32_t waypoint_count;
+  real_t horizontal_distance_m;
+} bayek_mission_status_t;
 
 #ifdef __cplusplus
 }

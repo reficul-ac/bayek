@@ -2,6 +2,7 @@ add_library(bayek_sim
   sim6dof.c
   sim_fixedwing.c
   sim_plant.c
+  trim_solver.c
 )
 
 target_include_directories(bayek_sim

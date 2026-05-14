@@ -8,15 +8,18 @@ The current packet layout is little-endian:
 
 ```text
 byte 0      sync byte: 0xA5
-bytes 1-2   topic_id
-bytes 3-6   timestamp_us
-bytes 7-8   sequence
-bytes 9-10  payload_len
-bytes 11-12 crc16
-bytes 13..  payload
+byte 1      packet version: 1
+bytes 2-3   topic_id
+bytes 4-7   timestamp_us
+bytes 8-9   sequence
+bytes 10-11 payload_len
+bytes 12-13 crc16
+bytes 14..  payload
 ```
 
 The maximum payload length is currently 128 bytes.
+
+This binary packet version is a Bayek telemetry-envelope contract. It does not replace Altair live viewer replay schema versioning; replay JSON remains governed by `ALTAIR_REPLAY_SCHEMA_VERSION`, and CSV/ULog-style imports continue to be translated into live viewer session snapshots.
 
 ## CRC
 

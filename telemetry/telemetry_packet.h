@@ -8,9 +8,11 @@
 extern "C" {
 #endif
 
+#define TELEMETRY_PACKET_VERSION (1U)
 #define TELEMETRY_MAX_PAYLOAD_LEN (128U)
-#define TELEMETRY_HEADER_LEN (13U)
+#define TELEMETRY_HEADER_LEN (14U)
 #define TELEMETRY_PACKET_MAX_LEN (TELEMETRY_HEADER_LEN + TELEMETRY_MAX_PAYLOAD_LEN)
+#define TELEMETRY_DECODE_UNSUPPORTED_VERSION (-3)
 
 typedef enum {
   TELEMETRY_TOPIC_HEARTBEAT = 1,
@@ -20,6 +22,7 @@ typedef enum {
 } telemetry_topic_t;
 
 typedef struct {
+  uint8_t version;
   uint16_t topic_id;
   uint32_t timestamp_us;
   uint16_t sequence;

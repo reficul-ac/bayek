@@ -23,6 +23,17 @@ Callers provide body-frame force and moment vectors in FRD axes. The core integr
 
 `sim/sim_fixedwing.c` is the first airframe model on top of that core. It is deterministic and parameter-struct based: no config parser, allocation, wind, or sensor noise. The model includes thrust, lift, drag, simple control moments, angular-rate damping, and a soft angle-of-attack lift limit for stall protection. It also converts truth state into `fsw_input_t` samples for SITL use.
 
+`sim/trim_solver.c` owns the generic bounded nonlinear trim solver. `sim/sitl_trim.c` owns the current Bayek fixed-wing SITL trim adapter for level-flight fixed-wing state handoff. Vehicle repositories choose when to enable trim, provide concrete limits and parameters, and decide whether trim failures are fatal for a given run.
+
+## Host SITL Harness
+
+`host/` contains Bayek-owned host-only SITL infrastructure that is reusable across vehicle repositories but intentionally kept outside `fsw`:
+
+- `sitl_initial_conditions.c/h`: dependency-free initial-condition files for geodetic pose, local NED velocity, body rates, airspeed, and RC defaults.
+- `sitl_conditions.c/h`: per-step condition files with `when = t_s/step comparator value` rules and assignments to generic targets such as `rc.*`, `input.*`, `vehicle_params.*`, `sim_params.*`, `plant.*`, `trim.*`, and `mission.*`.
+
+The `bayek_host_sitl` target may perform file I/O and use host C library facilities. Embedded code and `bayek/fsw` must not depend on it.
+
 ## Vehicle Runners
 
 Bayek does not own concrete SITL or Monte Carlo runner executables. Those belong in vehicle repositories because they bind `bayek_fsw_init()` to a concrete `bayek_vehicle_interface_t` implementation.
@@ -40,7 +51,8 @@ Future simulation work can add:
 - wind and turbulence models
 - sensor noise and bias models
 - actuator failure injection
-- scenario files
+- additional vehicle adapter registries for condition targets
+- generic scenario/case runner APIs once more vehicle repositories need them
 - binary log output
 - HITL transport adapters
 

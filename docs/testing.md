@@ -15,6 +15,7 @@ Framework-level unit tests should cover:
 - rate and slew limiting
 - deadband
 - telemetry encode/decode and CRC rejection
+- host SITL parsing, condition target validation, and condition evaluation without concrete vehicle symbols
 
 These tests keep low-level numerical and packet behavior visible and separate from vehicle-specific mode wiring.
 

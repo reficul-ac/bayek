@@ -17,9 +17,9 @@ typedef struct {
 } bayek_control_request_t;
 
 typedef struct {
-  pid_t roll_pid;
-  pid_t pitch_pid;
-  pid_t yaw_rate_pid;
+  bayek_pid_t roll_pid;
+  bayek_pid_t pitch_pid;
+  bayek_pid_t yaw_rate_pid;
 } bayek_control_state_t;
 
 void bayek_control_init(bayek_control_state_t *control);

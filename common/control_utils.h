@@ -18,7 +18,7 @@ typedef struct {
   real_t integrator_min;
   real_t integrator_max;
   uint8_t initialized;
-} pid_t;
+} bayek_pid_t;
 
 typedef struct {
   real_t value;
@@ -38,9 +38,9 @@ typedef struct {
   uint8_t initialized;
 } rate_limiter_t;
 
-void pid_init(pid_t *pid, real_t kp, real_t ki, real_t kd, real_t out_min, real_t out_max);
-void pid_reset(pid_t *pid);
-real_t pid_step(pid_t *pid, real_t setpoint, real_t measurement, real_t dt_s);
+void pid_init(bayek_pid_t *pid, real_t kp, real_t ki, real_t kd, real_t out_min, real_t out_max);
+void pid_reset(bayek_pid_t *pid);
+real_t pid_step(bayek_pid_t *pid, real_t setpoint, real_t measurement, real_t dt_s);
 
 void integrator_init(integrator_t *i, real_t min_value, real_t max_value);
 void integrator_reset(integrator_t *i, real_t value);

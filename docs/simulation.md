@@ -36,7 +36,7 @@ The `bayek_host_sitl` target may perform file I/O and use host C library facilit
 
 ## Vehicle Runners
 
-Bayek does not own concrete SITL or Monte Carlo runner executables. Those belong in vehicle repositories because they bind `bayek_fsw_init()` to a concrete `bayek_vehicle_interface_t` implementation.
+Bayek does not own concrete SITL or Monte Carlo runner executables. Those belong in vehicle repositories because they bind `altair_fsw_init()` to a concrete `bayek_vehicle_interface_t` implementation.
 
 Altair's host `sitl_runner` currently exposes two scenarios:
 
@@ -56,4 +56,4 @@ Future simulation work can add:
 - binary log output
 - HITL transport adapters
 
-Those changes should keep `bayek_fsw_step()` as the shared execution boundary.
+Those changes should keep `altair_fsw_step()` as the shared execution boundary.

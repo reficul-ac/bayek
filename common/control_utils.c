@@ -2,7 +2,7 @@
 
 #include "math_utils.h"
 
-void pid_init(pid_t *pid, real_t kp, real_t ki, real_t kd, real_t out_min, real_t out_max) {
+void pid_init(bayek_pid_t *pid, real_t kp, real_t ki, real_t kd, real_t out_min, real_t out_max) {
   pid->kp = kp;
   pid->ki = ki;
   pid->kd = kd;
@@ -15,13 +15,13 @@ void pid_init(pid_t *pid, real_t kp, real_t ki, real_t kd, real_t out_min, real_
   pid->initialized = 0U;
 }
 
-void pid_reset(pid_t *pid) {
+void pid_reset(bayek_pid_t *pid) {
   pid->integrator = 0.0f;
   pid->prev_error = 0.0f;
   pid->initialized = 0U;
 }
 
-real_t pid_step(pid_t *pid, real_t setpoint, real_t measurement, real_t dt_s) {
+real_t pid_step(bayek_pid_t *pid, real_t setpoint, real_t measurement, real_t dt_s) {
   real_t error = setpoint - measurement;
   real_t derivative = 0.0f;
   if (pid->initialized && dt_s > 0.0f) {

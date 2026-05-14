@@ -1,3 +1,3 @@
 # Altair HITL
 
-This directory is reserved for hardware-in-the-loop adapters. The flight core should remain independent of these files; HITL code should translate external sensor, actuator, and telemetry transports into the public `bayek_fsw_step()` interface.
+This directory is reserved for hardware-in-the-loop adapters. The flight core should remain independent of these files; HITL code should translate external sensor, actuator, and telemetry transports into the public `altair_fsw_step()` interface.

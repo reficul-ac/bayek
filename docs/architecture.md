@@ -33,21 +33,21 @@ host
 vehicle repositories
 ```
 
-`fsw` receives vehicle behavior through `bayek_vehicle_interface_t`. Vehicle code owns the concrete parameter set, mixer, and safe actuator policy.
+`fsw` exposes reusable domain modules plus the vehicle-interface type. Vehicle code owns the concrete parameter set, mixer, safe actuator policy, and main FSW scheduling.
 
 ## Module Responsibilities
 
 `common` owns reusable data types and primitive algorithms. These utilities should stay generic enough for any vehicle or board.
 
-`fsw` owns the portable flight software loop. The public API is intentionally small: initialize, reset, and step the core. Internally, the implementation is organized by domain:
+`fsw` owns portable, reusable flight domains:
 
 - `nav`: state-estimate reset and update.
 - `fault`: input validity checks and mode/failsafe selection.
 - `guidance`: mode-specific setpoint generation.
 - `control`: controller state and normalized control requests.
-- `fsw`: the orchestration facade that preserves the public API and calls the configured vehicle interface.
+- `mission`: waypoint mission validation, active-waypoint advancement, status, and setpoint selection.
 
-The domain headers are internal implementation boundaries for now. Bayek should expose public `nav`, `guidance`, `control`, or `fault` APIs only when a real caller needs those contracts.
+Vehicle repositories orchestrate these domains in their own FSW facade. Bayek should keep those domain APIs vehicle-agnostic.
 
 `sim` owns generic plant dynamics, state propagation, sensor-input helpers, fixed-wing dynamics helpers, and generic trim solving support. It may include reusable airframe-class helpers, such as the fixed-wing level-flight trim adapter, as long as they depend only on Bayek types and not on a concrete vehicle repository.
 
@@ -55,7 +55,7 @@ The domain headers are internal implementation boundaries for now. Bayek should 
 
 Vehicle-specific scenario runners, Monte Carlo profiles, logs, CSV schemas, CLI workflows, and default parameter choices belong in the vehicle repository because they bind Bayek to a concrete vehicle interface and workflow policy.
 
-`telemetry` owns binary packet formatting. It is independent of `bayek_fsw_step()` so telemetry can be used by host tools, embedded transports, or HITL without coupling packet handling to control execution.
+`telemetry` owns binary packet formatting. It is independent of `altair_fsw_step()` so telemetry can be used by host tools, embedded transports, or HITL without coupling packet handling to control execution.
 
 ## Build Model
 

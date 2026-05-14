@@ -27,6 +27,6 @@ Vehicle repositories should own tests that verify their parameters, mixers, boar
 
 ## Performance Tests
 
-Performance tests should call `bayek_fsw_step()` many times and print timing. Thresholds should be conservative until target hardware, loop rate, and control complexity are better understood.
+Performance tests should call `altair_fsw_step()` many times and print timing. Thresholds should be conservative until target hardware, loop rate, and control complexity are better understood.
 
 Early performance numbers are more useful as trend data than hard certification gates.

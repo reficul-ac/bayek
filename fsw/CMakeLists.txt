@@ -1,8 +1,8 @@
 add_library(bayek_fsw
   control.c
   fault.c
-  fsw.c
   guidance.c
+  mission.c
   nav.c
 )
 

@@ -39,6 +39,6 @@ Vehicle-specific topic IDs start at `1000`.
 
 ## Boundaries
 
-Telemetry helpers do not call `bayek_fsw_step()` and the flight core does not call telemetry helpers. A board, host logger, or HITL adapter may choose when to encode FSW outputs or decode incoming commands.
+Telemetry helpers do not call `altair_fsw_step()` and the flight core does not call telemetry helpers. A board, host logger, or HITL adapter may choose when to encode FSW outputs or decode incoming commands.
 
 This separation keeps telemetry bandwidth, packet format, and transport failures from becoming hidden dependencies inside control logic.

@@ -14,6 +14,23 @@ Prefer small deterministic APIs, caller-owned state, and existing C99 patterns.
 Bayek currently uses `real_t` as `float`. Preserve C99 portability and avoid
 compiler, platform, or host assumptions unless the code is explicitly host-only.
 
+## Backlog Hygiene
+
+Treat the repo TODO list as part of the required closeout for every work item,
+including Plan mode investigations. Before finalizing, review Bayek's local
+`TODO.md` when present; when working from an Altair checkout and Bayek has no
+local TODO, use the parent repository `TODO.md` for discovered follow-up work
+that affects Bayek or its Altair integration:
+
+- check off any item that the completed work fully resolves
+- add a concise unchecked item for any real bug, missing test, or improvement
+  discovered during the work but left outside the current scope
+- avoid duplicates; update an existing item when that is clearer than adding a
+  new one
+
+Keep entries specific enough for a future agent to act on, and place them under
+the closest existing heading.
+
 ## Boundaries
 
 Bayek must not include Altair headers, link Altair targets, or assume a specific
